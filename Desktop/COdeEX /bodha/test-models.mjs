@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 async function listModels() {
-    const apiKey = 'AIzaSyDarD9j3QZLwGFnny8CbTyYNqMcD5pauqk';
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) { console.error('Set GEMINI_API_KEY env var'); process.exit(1); }
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
