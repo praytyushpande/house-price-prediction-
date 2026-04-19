@@ -90,7 +90,7 @@ export default function ReportView({ report, repoUrl, mode = 'pm', onStartChat }
                             return (
                                 <h2 id={id} className={`report-section-heading ${isContributor ? 'report-section-heading-contributor' : ''}`}>
                                     <span className="section-icon">{icon}</span>
-                                    {children}
+                                    <span className="section-title">{children}</span>
                                 </h2>
                             );
                         },

@@ -630,11 +630,12 @@ body {
    =================================== */
 
 .report-content {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(20, 20, 35, 0.85), rgba(10, 10, 15, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-xl);
-  padding: 48px;
-  backdrop-filter: blur(20px);
+  padding: 56px;
+  backdrop-filter: blur(24px);
 }
 
 .report-content > :first-child {
@@ -644,14 +645,21 @@ body {
 .report-section-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 22px;
-  font-weight: 700;
+  gap: 16px;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--text-primary);
-  margin: 48px 0 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-  letter-spacing: -0.3px;
+  margin: 56px 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: -0.5px;
+}
+
+.report-section-heading .section-title {
+  background: linear-gradient(90deg, #ffffff, var(--accent-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .report-section-heading:first-child,
@@ -664,92 +672,146 @@ body {
 }
 
 .report-subsection {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-primary);
-  margin: 28px 0 12px;
+  margin: 36px 0 16px;
+  letter-spacing: -0.3px;
 }
 
 .report-content p {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 16px;
 }
 
 .report-content strong,
 .report-bold {
-  color: var(--text-primary);
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
 }
 
 .report-list {
-  margin: 12px 0;
-  padding-left: 24px;
+  margin: 20px 0;
 }
 
 .report-list-ordered {
-  list-style: decimal;
+  list-style: none;
+  counter-reset: report-counter;
 }
 
 .report-list-item {
+  position: relative;
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 12px;
+  padding-left: 32px;
+}
+
+.report-list:not(.report-list-ordered) .report-list-item {
+  list-style: none;
+}
+
+.report-list:not(.report-list-ordered) .report-list-item::before {
+  content: '✦';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.report-list-ordered .report-list-item {
+  counter-increment: report-counter;
+}
+
+.report-list-ordered .report-list-item::before {
+  content: counter(report-counter) ".";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: var(--accent);
+  font-weight: 700;
   font-size: 15px;
   line-height: 1.8;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
 }
 
 .report-list-item::marker {
-  color: var(--accent);
+  display: none;
 }
 
 .report-quote {
-  margin: 16px 0;
-  padding: 16px 20px;
-  border-left: 3px solid var(--accent);
-  background: var(--accent-glow);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 24px 0;
+  padding: 20px 24px;
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(90deg, rgba(167, 139, 250, 0.1), transparent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .report-quote p {
-  color: var(--text-primary);
+  color: #fff;
   font-style: italic;
+  font-size: 18px;
 }
 
 /* Traffic lights */
 .report-traffic-light {
-  padding: 16px 20px;
-  border-radius: var(--radius-md);
-  margin: 16px 0;
-  border: 1px solid var(--border);
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  margin: 24px 0;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 16px !important;
+  font-weight: 500;
+  color: #fff !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .traffic-green {
-  background: rgba(52, 211, 153, 0.06);
-  border-color: rgba(52, 211, 153, 0.15);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.05));
+  border-color: rgba(52, 211, 153, 0.3);
+  box-shadow: 0 4px 20px rgba(52, 211, 153, 0.1);
 }
 
 .traffic-yellow {
-  background: rgba(251, 191, 36, 0.06);
-  border-color: rgba(251, 191, 36, 0.15);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+  border-color: rgba(251, 191, 36, 0.3);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
 }
 
 .traffic-red {
-  background: rgba(248, 113, 113, 0.06);
-  border-color: rgba(248, 113, 113, 0.15);
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.1), rgba(239, 68, 68, 0.05));
+  border-color: rgba(248, 113, 113, 0.3);
+  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.2);
 }
 
 /* Bottom line callout */
 .report-bottom-line {
-  margin-top: 32px;
-  padding: 20px 24px;
-  background: linear-gradient(135deg, var(--accent-glow), rgba(129, 140, 248, 0.08));
-  border: 1px solid var(--border-accent);
-  border-radius: var(--radius-md);
-  font-size: 16px !important;
-  font-weight: 500;
-  color: var(--text-primary) !important;
-  line-height: 1.7;
+  margin-top: 40px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(99, 102, 241, 0.1));
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  font-size: 18px !important;
+  font-weight: 600;
+  color: #fff !important;
+  line-height: 1.8;
+  box-shadow: 0 10px 40px rgba(167, 139, 250, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.report-bottom-line::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 4px; height: 100%;
+  background: var(--accent);
 }
 
 /* ===================================
@@ -950,11 +1012,43 @@ body {
   border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 4px;
   font-size: 14px;
   line-height: 1.6;
+  word-break: break-word;
+  overflow-wrap: break-word; /* Prevent text overflow */
+}
+
+/* Handle chat code block and markdown elements overflow */
+.chat-code-block {
+  margin: 8px 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-code-block code {
+  color: #fff;
+  font-family: 'SF Mono', 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 12px;
+  white-space: pre;
+}
+
+.chat-inline-code {
+  display: inline;
+  padding: 2px 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 12px;
+  word-break: break-word;
+  color: var(--accent-hover);
 }
 
 .chat-msg-content p {
   color: var(--text-secondary);
   margin: 0 0 8px;
+  min-width: 0;
 }
 
 .chat-msg-content p:last-child {
@@ -966,7 +1060,7 @@ body {
 }
 
 .chat-msg-content ul, .chat-msg-content ol {
-  padding-left: 18px;
+  padding-left: 20px;
   margin: 8px 0;
 }
 
@@ -974,6 +1068,7 @@ body {
   font-size: 14px;
   color: var(--text-secondary);
   margin-bottom: 4px;
+  word-break: break-word;
 }
 
 /* Typing indicator */
@@ -1510,6 +1605,7 @@ code {
   font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
   font-size: 13px;
   color: var(--accent-hover);
+  word-break: break-word;
 }
 
 .report-code-block {

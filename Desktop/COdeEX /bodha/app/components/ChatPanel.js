@@ -114,7 +114,25 @@ export default function ChatPanel({ repoContext, mode = 'pm', onClose }) {
                             <span className="chat-msg-avatar">{isContributor ? '🛠️' : '✦'}</span>
                         )}
                         <div className="chat-msg-content">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    code: ({ node, inline, className, children, ...props }) => {
+                                        if (!inline) {
+                                            return (
+                                                <div className="chat-code-block">
+                                                    <code className={className} {...props}>
+                                                        {children}
+                                                    </code>
+                                                </div>
+                                            );
+                                        }
+                                        return <code className="chat-inline-code" {...props}>{children}</code>;
+                                    }
+                                }}
+                            >
+                                {msg.content}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 ))}
