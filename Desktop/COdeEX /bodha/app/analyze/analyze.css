@@ -1720,3 +1720,133 @@ code {
     display: none;
   }
 }
+
+/* ===================================
+   GitHub Connect UI
+   =================================== */
+
+.github-connect-wrapper {
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease-out 0.15s both;
+}
+
+/* -- Connect button (not yet connected) -- */
+.github-connect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #1a1f2e, #21262d);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: rgba(240, 240, 245, 0.85);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+}
+
+.github-connect-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #21262d, #30363d);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.github-connect-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.github-connect-icon {
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.github-connect-lock {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* -- Connected badge -- */
+.github-connected-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px 8px 8px;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(16, 185, 129, 0.04));
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  border-radius: var(--radius-full);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.github-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.github-connected-check {
+  font-size: 13px;
+  font-weight: 700;
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.github-connected-text {
+  font-size: 13px;
+  color: rgba(240, 240, 245, 0.75);
+  font-weight: 500;
+}
+
+.github-connected-text strong {
+  color: rgba(240, 240, 245, 0.95);
+  font-weight: 600;
+}
+
+.github-disconnect-btn {
+  background: none;
+  border: none;
+  color: rgba(240, 240, 245, 0.3);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.github-disconnect-btn:hover {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+/* -- Private mode input ring -- */
+.hero-input-private {
+  caret-color: #34d399;
+}
+
+.input-wrapper:has(.hero-input-private):focus-within {
+  border-color: rgba(52, 211, 153, 0.35);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.06), 0 0 40px rgba(52, 211, 153, 0.05);
+}
+
+/* Lock icon pulse when private mode active */
+.input-icon:has(span) span {
+  display: inline-block;
+  animation: lock-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes lock-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}

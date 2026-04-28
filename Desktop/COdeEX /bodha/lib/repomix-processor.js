@@ -5,12 +5,21 @@ import os from 'os';
 
 /**
  * Processes a GitHub repo URL using Repomix programmatic API.
+ * @param {string} githubUrl - Public or private GitHub repo URL
+ * @param {string|null} githubToken - Optional OAuth token for private repo access
  */
-export async function processRepo(githubUrl) {
+export async function processRepo(githubUrl, githubToken = null) {
     // Validate GitHub URL
     const githubRegex = /^https?:\/\/(www\.)?github\.com\/[\w.-]+\/[\w.-]+(\/)?$/;
     if (!githubRegex.test(githubUrl.trim())) {
-        throw new Error('Invalid GitHub URL. Please provide a valid public repository URL (e.g., https://github.com/user/repo).');
+        throw new Error('Invalid GitHub URL. Please provide a valid repository URL (e.g., https://github.com/user/repo).');
+    }
+
+    // If a GitHub token is provided, inject it into the clone URL for authentication.
+    // This is the standard HTTPS-with-credentials approach for private repos.
+    let repoUrl = githubUrl.trim().replace(/\/$/, '');
+    if (githubToken) {
+        repoUrl = repoUrl.replace('https://github.com/', `https://${githubToken}@github.com/`);
     }
 
     // Create a temp directory for the output
@@ -20,7 +29,7 @@ export async function processRepo(githubUrl) {
     try {
         // Use repomix programmatic API instead of CLI
         // This is more stable on Vercel and avoids "npx" permission issues
-        await runRemoteAction(githubUrl.trim(), {
+        await runRemoteAction(repoUrl, {
             output: outputFile,
             style: 'plain',
             stdout: false

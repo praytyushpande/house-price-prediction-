@@ -17,11 +17,29 @@ export async function POST(request) {
             );
         }
 
-        // Step 1: Process repo with Repomix
+        // Read the GitHub OAuth token from the secure HttpOnly cookie (if connected)
+        const githubToken = request.cookies.get('gh_token')?.value || null;
+
+        // Step 1: Process repo with Repomix (passes token for private repo access)
         let repoContents;
         try {
-            repoContents = await processRepo(githubUrl);
+            repoContents = await processRepo(githubUrl, githubToken);
         } catch (err) {
+            // Give a more helpful error message if the repo is private and no token is set
+            const isPrivateError =
+                err.message.includes('not found') ||
+                err.message.includes('inaccessible') ||
+                err.message.includes('authentication') ||
+                err.message.includes('403') ||
+                err.message.includes('404');
+
+            if (isPrivateError && !githubToken) {
+                return NextResponse.json(
+                    { error: 'This repository appears to be private. Please connect your GitHub account to analyze private repos.' },
+                    { status: 403 }
+                );
+            }
+
             return NextResponse.json(
                 { error: `Failed to process repository: ${err.message}` },
                 { status: 400 }

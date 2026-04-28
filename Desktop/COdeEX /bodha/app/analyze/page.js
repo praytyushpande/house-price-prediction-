@@ -1,13 +1,18 @@
 'use client';
 
 import './analyze.css';
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import HeroInput from '../components/HeroInput';
 import LoadingState from '../components/LoadingState';
 import ReportView from '../components/ReportView';
 import ChatPanel from '../components/ChatPanel';
 
-export default function Home() {
+/**
+ * Inner component that reads search params (must be inside a Suspense boundary
+ * per Next.js requirements for static pre-rendering).
+ */
+function AnalyzeApp() {
     const [state, setState] = useState('hero'); // hero | loading | report
     const [report, setReport] = useState('');
     const [repoUrl, setRepoUrl] = useState('');
@@ -15,6 +20,64 @@ export default function Home() {
     const [error, setError] = useState('');
     const [showChat, setShowChat] = useState(false);
     const [mode, setMode] = useState('pm'); // 'pm' | 'contributor'
+
+    // GitHub OAuth state
+    const [githubConnected, setGithubConnected] = useState(false);
+    const [githubUser, setGithubUser] = useState(null);
+    const [githubAvatar, setGithubAvatar] = useState(null);
+
+    const searchParams = useSearchParams();
+
+    // Check GitHub connection status on mount and after OAuth redirect
+    useEffect(() => {
+        const checkGithubStatus = async () => {
+            try {
+                const res = await fetch('/api/auth/github/status');
+                const data = await res.json();
+                if (data.connected) {
+                    setGithubConnected(true);
+                    setGithubUser(data.user);
+                    setGithubAvatar(data.avatar);
+                } else {
+                    setGithubConnected(false);
+                    setGithubUser(null);
+                    setGithubAvatar(null);
+                }
+            } catch (e) {
+                // silently fail — GitHub connect is optional
+            }
+        };
+
+        checkGithubStatus();
+
+        // Handle redirects from OAuth callback
+        const connected = searchParams.get('github_connected');
+        const oauthError = searchParams.get('github_error');
+
+        if (connected === 'true') {
+            window.history.replaceState({}, '', '/analyze');
+            checkGithubStatus();
+        }
+        if (oauthError) {
+            setError(
+                oauthError === 'access_denied'
+                    ? 'GitHub access was denied. Please try connecting again.'
+                    : 'GitHub login failed. Please try again.'
+            );
+            window.history.replaceState({}, '', '/analyze');
+        }
+    }, [searchParams]);
+
+    const handleGithubConnect = () => {
+        window.location.href = '/api/auth/github';
+    };
+
+    const handleGithubDisconnect = async () => {
+        await fetch('/api/auth/github/disconnect', { method: 'POST' });
+        setGithubConnected(false);
+        setGithubUser(null);
+        setGithubAvatar(null);
+    };
 
     const handleAnalyze = async (githubUrl, selectedMode) => {
         setState('loading');
@@ -78,7 +141,15 @@ export default function Home() {
             )}
 
             {state === 'hero' && (
-                <HeroInput onSubmit={handleAnalyze} isLoading={false} />
+                <HeroInput
+                    onSubmit={handleAnalyze}
+                    isLoading={false}
+                    githubConnected={githubConnected}
+                    githubUser={githubUser}
+                    githubAvatar={githubAvatar}
+                    onGithubConnect={handleGithubConnect}
+                    onGithubDisconnect={handleGithubDisconnect}
+                />
             )}
 
             {state === 'loading' && <LoadingState mode={mode} />}
@@ -106,5 +177,21 @@ export default function Home() {
                 </footer>
             )}
         </main>
+    );
+}
+
+// Wrap in Suspense — required by Next.js when using useSearchParams() in a page component
+export default function Home() {
+    return (
+        <Suspense fallback={
+            <main className="main">
+                <div className="ambient-bg">
+                    <div className="ambient-orb ambient-orb-1" />
+                    <div className="ambient-orb ambient-orb-2" />
+                </div>
+            </main>
+        }>
+            <AnalyzeApp />
+        </Suspense>
     );
 }
