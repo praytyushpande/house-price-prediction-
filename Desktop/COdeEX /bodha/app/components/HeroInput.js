@@ -76,6 +76,7 @@ export default function HeroInput({
                 {githubConnected ? (
                     <div className="github-connected-badge">
                         {githubAvatar && (
+                            /* eslint-disable-next-line @next/next/no-img-element */
                             <img
                                 src={githubAvatar}
                                 alt={githubUser}
