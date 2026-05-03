@@ -49,7 +49,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-[#7B61FF]/30 font-body relative isolate overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[#0A0A0A] text-white selection:bg-[#7B61FF]/30 font-body relative isolate overflow-x-hidden">
       
       {/* 1. NAVBAR */}
       <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-[#0A0A0A]/70 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-8'}`}>
